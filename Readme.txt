@@ -5,6 +5,7 @@ Requires:
         pandas
         pyautogui
         keyboard
+		sklearn
 
 Run from Blackjack Main.py
 Make your game maximized, small numbers probably makes the OCR worse, I didn't run full-screen
@@ -28,3 +29,4 @@ Run boundingbox.py to pick bounding boxes
     Order of Strategy:
         Check if split is optimal -> Check if surrender is optimal -> Check if soft total -> Check if hard total
     
+
