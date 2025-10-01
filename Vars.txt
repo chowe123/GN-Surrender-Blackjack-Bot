@@ -1,0 +1,4 @@
+dealer = (979, 304, 1015, 334)
+playerTable = (10, 466, 1852, 847)
+buttonBbox = (692, 896, 1170, 1001)
+dynamicDealer = (1)
