@@ -16,7 +16,8 @@ Run boundingbox.py to pick bounding boxes
 	Drag box around area and press enter, copy tuple into Blackjack Main.py
 
 
-
+Change dynamicDealer to 1 to use searching function to find dealer box (draw larger dealerBBox)
+0 to use static dealer box (draw as small as possible around total)
 
 
     F8 to start/stop script
@@ -29,4 +30,5 @@ Run boundingbox.py to pick bounding boxes
     Order of Strategy:
         Check if split is optimal -> Check if surrender is optimal -> Check if soft total -> Check if hard total
     
+
 
