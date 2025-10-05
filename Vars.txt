@@ -1,4 +1,6 @@
-dealer = (979, 304, 1015, 334)
-playerTable = (10, 466, 1852, 847)
-buttonBbox = (692, 896, 1170, 1001)
-dynamicDealer = (1)
+dealer = (972, 293, 1016, 339)
+playerTable = (58, 572, 1806, 852)
+buttonBbox = (689, 897, 1170, 1004)
+dynamicDealer = 0
+specificCard = (895, 686, 920, 716)
+surrender15Specific = 1

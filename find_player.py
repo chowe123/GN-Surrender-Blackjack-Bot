@@ -1,8 +1,28 @@
 from PIL import ImageGrab
 import cv2
 import numpy as np
+import pyautogui
 
-def detect_gold_boxes(bbox=(123, 449, 1777, 857), lower_color=np.array([20, 161, 54]), upper_color=np.array([21, 206, 245]), min_area=50, tolerance=15):
+import cv2
+import numpy as np
+import pyautogui
+from PIL import ImageGrab
+import os
+
+import cv2
+import numpy as np
+import pyautogui
+from PIL import ImageGrab
+import os
+
+def detect_boxes(bbox=(123, 449, 1777, 857), mode='player', min_area=400, tolerance=15):
+    
+    if mode == 'player':
+        lower_color = np.array([20, 161, 54])  # Example lower HSV for gold
+        upper_color = np.array([21, 206, 245])  # Example upper HSV for gold
+    elif mode == 'dealer':
+        lower_color = np.array([0, 0, 0])  # Example lower HSV for black
+        upper_color = np.array([0, 0, 0])  # Example upper HSV for black
     screenshot = ImageGrab.grab(bbox=bbox)
     img_np = np.array(screenshot)
     img = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
@@ -32,13 +52,22 @@ def detect_gold_boxes(bbox=(123, 449, 1777, 857), lower_color=np.array([20, 161,
 
     return boxes, img
 
+
+
+
+
+
+
+
 if __name__ == "__main__":
+    import ReadVars
+    varDict = ReadVars.read_tuples_from_file("Vars.txt")
     # Example usage
-    table_bbox = (884, 281, 1112, 369)
+    table_bbox = varDict.get('playerTable', (123, 449, 1777, 857))
     lower_color = np.array([0, 0, 0])
     upper_color = np.array([0, 0, 0])
 
-    detected_boxes, screenshot_img = detect_gold_boxes(table_bbox, lower_color, upper_color)
+    detected_boxes, screenshot_img = detect_boxes(varDict['playerTable'], mode='player')
     print(detected_boxes)  # e.g., [(982, 309, 1012, 329), ...]
 
     # Draw boxes on the cropped image (convert back to relative coordinates)
@@ -53,4 +82,6 @@ if __name__ == "__main__":
     cv2.imshow("Detected Gold Boxes", screenshot_img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    
+
 
