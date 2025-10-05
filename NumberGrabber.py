@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 import find_player
 import os
+import pyautogui
+import ReadVars
 
 import resource_path
 
@@ -12,8 +14,6 @@ import resource_path
 
 dealer = (983, 310, 1010, 330)
 
-valid_values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', 
-                '1/11', '2/12', '3/13', '4/14', '5/15', '6/16', '7/17', '8/18', '9/19', '10/20']
 
 # Create separate folders for player and dealer images
 PLAYER_DIR = "captured_cards/player"
@@ -45,28 +45,25 @@ def ocr_card(bbox=(125, 439, 1777, 847), mode='player'):
     # Save using PIL (true RGB)
     Image.fromarray(processed).save(filepath)
     print(f"Saved image as {filepath}")
-    
-    # # OCR
-    # text = pytesseract.image_to_string(
-    #     processed, 
-    #     config='--psm 7 -c tessedit_char_whitelist=0123456789/ --user-words tessdata/user-words.txt'
-    # )
-    
-    # if text.strip() == '1':
-    #     return '7'
-    # return text.strip()
+
     
 def NumberGrabberTest(playerTableBbox, DealerBbox):
-    player_box = find_player.detect_gold_boxes(bbox=playerTableBbox)[0][0]
+    varDict = ReadVars.read_tuples_from_file("Vars.txt")
+    player_box = find_player.detect_boxes(bbox=playerTableBbox, mode="player")[0][0]
     player_text = ocr_card(player_box, mode='player')
-    dealer_box = DealerBbox
+    if varDict.get('dynamicDealer', (1)) == 0:
+        dealer_box = DealerBbox
+    else:
+        dealer_box = find_player.detect_boxes(bbox=DealerBbox, mode='dealer')[0][0]
     dealer_text = ocr_card(dealer_box, mode='dealer')
     
 
 if __name__ == "__main__":
-    player_box = find_player.detect_gold_boxes()[0][0]
-    player_text = ocr_card(player_box, mode='player')
-    dealer_text = ocr_card(find_player.detect_gold_boxes(bbox=(945, 297, 1054, 345), lower_color=np.array([0, 0, 0]), upper_color=np.array([0, 0, 0]))[0][0], mode='dealer')
+    varDict = ReadVars.read_tuples_from_file("Vars.txt")
+    NumberGrabberTest(playerTableBbox=varDict.get('playerTable'), DealerBbox=varDict.get('dealer'))
+    # player_box = find_player.detect_gold_boxes()[0][0]
+    # player_text = ocr_card(player_box, mode='player')
+    # dealer_text = ocr_card(find_player.detect_gold_boxes(bbox=(945, 297, 1054, 345), lower_color=np.array([0, 0, 0]), upper_color=np.array([0, 0, 0]))[0][0], mode='dealer')
 
-    print(f"Player OCR: {player_text}")
-    print(f"Dealer OCR: {dealer_text}")
+    # print(f"Player OCR: {player_text}")
+    # print(f"Dealer OCR: {dealer_text}")
