@@ -3,8 +3,9 @@ import numpy as np
 import pyautogui
 
 def pick_bbox():
-    # Take full screenshot
+
     screenshot = pyautogui.screenshot()
+    
     img = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
     clone = img.copy()
 

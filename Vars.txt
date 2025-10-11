@@ -4,3 +4,4 @@ buttonBbox = (689, 897, 1170, 1004)
 dynamicDealer = 0
 specificCard = (895, 686, 920, 716)
 surrender15Specific = 1
+delay = 0.5

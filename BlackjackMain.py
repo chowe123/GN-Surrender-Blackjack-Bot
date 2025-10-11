@@ -18,6 +18,7 @@ dealer = ()
 playerTable = ()
 buttonBbox = ()
 valid_dealer = set(['2','3','4','5','6','7','8','9','10','1_11'])
+delay = .2
 
 
 strategy_sheet = r"Strategy.xlsx"
@@ -50,7 +51,7 @@ def buttonClicker(location, bbox):
 
     pyautogui.moveTo(midPoint[0], midPoint[1])
     pyautogui.click()
-    time.sleep(0.2)
+    time.sleep(delay)
 
 def toggle_running():
     global running, bets_placed, start_time
@@ -68,16 +69,9 @@ def toggle_running():
 
 
 def main():
-    check = OCR.imageCheck()
-    if check[0] or check[1]:
-        if check[0]:
-            print("Missing player images:", check[0])
-        if check[1]:
-            print("Missing dealer images:", check[1])
-        print("Run NumberGrabber.py to capture missing images before running the main script.")
-        return
+
     
-    global dealer, playerTable, buttonBbox
+    global dealer, playerTable, buttonBbox, delay
     
     variables = ReadVars.read_tuples_from_file("Vars.txt")
     dealer = variables.get("dealer", dealer)
@@ -86,14 +80,16 @@ def main():
     dynamic_dealer = variables.get("dynamicDealer")
     specific_card = variables.get("specificCard")
     surrender15Specific = variables.get("surrender15Specific")
+    delay = variables.get("delay")
 
     keyboard.add_hotkey("F8", toggle_running)
     print("Press F8 to start/stop script. Press ESC to exit.")
     
     attempted_unavailale_surrender = False
+    
     while True:
         if not running:
-            time.sleep(0.1)
+            time.sleep(0.)
             if keyboard.is_pressed("esc"):
                 print("Exiting script.")
                 break
@@ -104,12 +100,13 @@ def main():
             print("Exiting script.")
             break
 
-        time.sleep(0.5)
+        
         
 
         
         buttons = ButtonChecker.check_buttons(bbox=buttonBbox)
-
+        time.sleep(delay)
+        
         # --- Rebet Logic ---
         if "RebetDealAvailable.PNG" in buttons:
             attempted_unavailale_surrender = False
@@ -168,6 +165,12 @@ def main():
                     bets_placed += 1
                     buttonClicker(buttons["SplitAvailable.PNG"],bbox=buttonBbox)
                     last_print = "Splitting"
+                    time.sleep(1)  # wait for split to process
+                    buttons = ButtonChecker.check_buttons(bbox=buttonBbox)
+                    while "HitAvailable.PNG" not in buttons:
+                        print("Waiting for buttons to load after split")
+                        time.sleep(0.1)
+                        buttons = ButtonChecker.check_buttons(bbox=buttonBbox)
                     continue
             if player_text == "2_12" and "SplitAvailable.PNG" not in buttons:
                 print("Split button not detected for some reason, continuing")
@@ -291,6 +294,7 @@ def main():
                         continue
                     buttonClicker(buttons["StandAvailable.PNG"],bbox=buttonBbox)
                     continue
+        
 
 
 if __name__ == "__main__":

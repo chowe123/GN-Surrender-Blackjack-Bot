@@ -56,7 +56,7 @@ def ocr_card(bbox, scale_factor=2, mode='player'):
         return None
     
     
-def ocr_specific_card(bbox, scale_factor=3):
+def ocr_specific_card(bbox, scale_factor=5):
     screen_shot = ImageGrab.grab(bbox=bbox)
     img = np.array(screen_shot)
     img_rgb = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
